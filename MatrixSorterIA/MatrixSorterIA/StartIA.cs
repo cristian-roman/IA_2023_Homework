@@ -5,7 +5,10 @@
     {
         private static void Main(string[] args)
         {
-            System.Console.WriteLine("start");
+            IA.Start(new List<int>()
+            {
+                8, 6, 7, 2, 5, 4, 0, 3, 1
+            });
         }
     }
 }
