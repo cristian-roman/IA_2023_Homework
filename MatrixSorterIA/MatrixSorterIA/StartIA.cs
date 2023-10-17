@@ -1,6 +1,7 @@
 ﻿namespace MatrixSorterIA
 {
-    internal static class Program
+    // ReSharper disable once InconsistentNaming
+    internal static class StartIA
     {
         private static void Main(string[] args)
         {
