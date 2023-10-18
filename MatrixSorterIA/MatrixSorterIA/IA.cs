@@ -6,6 +6,7 @@ namespace MatrixSorterIA
     // ReSharper disable once InconsistentNaming
     public static class IA
     {
+        private const int MaxDepth = 10000;
         private enum Direction
         {
             Up,
@@ -18,6 +19,51 @@ namespace MatrixSorterIA
         public static void Start(IEnumerable<int> input)
         {
             _initialState = new StateModel(TurnInputToMatrix(input));
+            Iddfs(_initialState!);
+        }
+
+        private static void Iddfs(StateModel initialState)
+        {
+            foreach (var depth in Enumerable.Range(0, MaxDepth))
+            {
+                var visitedStates = new HashSet<StateModel>();
+                
+                var solution = DepthLimitedDfs(initialState, depth, visitedStates);
+                
+                if (solution == null) continue;
+                
+                
+                Console.WriteLine();
+                Console.WriteLine("Found solution:");
+                Console.WriteLine(solution);
+                return;
+            }
+            
+            Console.WriteLine("No solution found");
+        }
+
+        private static StateModel? DepthLimitedDfs(StateModel currentState, int depth, ISet<StateModel> visited)
+        {
+            if (currentState.IsFinalState())
+                return currentState;
+
+            if (depth <= 0)
+                return null;
+            
+            visited.Add(currentState);
+            
+            foreach (var direction in Enum.GetValues(typeof(Direction)))
+            {
+                var nextState = ToNextState(currentState, (Direction) direction);
+                if (nextState == null || visited.Contains(nextState))
+                    continue;
+                
+                var solution = DepthLimitedDfs(nextState, depth - 1, visited);
+                if (solution != null)
+                    return solution;
+            }
+
+            return null;
         }
     
         // step 2 - metoda de parsare a inputului ca stare intiala
@@ -50,9 +96,18 @@ namespace MatrixSorterIA
             
             if(IsNextStateGoingBackward(currentState, emptyCellMovement))
                 return null;
+
+            var newStateMatrix = currentState.Matrix;
             
+            var nextZeroedLocationExpected = GetNextZeroedLocationExpected(currentState.CurrentZeroedCellLocation!, emptyCellMovement);
+            
+            //swap the values
+            
+            (newStateMatrix[currentState.CurrentZeroedCellLocation!.Y, currentState.CurrentZeroedCellLocation!.X], newStateMatrix[nextZeroedLocationExpected.Y, nextZeroedLocationExpected.X]) = 
+                (newStateMatrix[nextZeroedLocationExpected.Y, nextZeroedLocationExpected.X], newStateMatrix[currentState.CurrentZeroedCellLocation!.Y, currentState.CurrentZeroedCellLocation!.X]);
+
             return new StateModel(currentState.Matrix, 
-                GetNextZeroedLocationExpected(currentState.CurrentZeroedCellLocation!, emptyCellMovement), 
+                nextZeroedLocationExpected, 
                 currentState.CurrentZeroedCellLocation!);
         }
 
