@@ -41,6 +41,8 @@ namespace MatrixSorterIA
             return initialState;
         }
 
+        
+        // step - 3 metoda de trecere la un nou state si daca acesta este valid
         private static StateModel? ToNextState(StateModel currentState, Direction emptyCellMovement)
         { 
             if(IsNewStateOutBounded(currentState, emptyCellMovement)) 
