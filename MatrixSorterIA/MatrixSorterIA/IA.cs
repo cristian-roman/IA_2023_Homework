@@ -97,16 +97,17 @@ namespace MatrixSorterIA
             if(IsNextStateGoingBackward(currentState, emptyCellMovement))
                 return null;
 
-            var newStateMatrix = currentState.Matrix;
+            var newStateMatrix = new int[3,3];
+            Array.Copy(currentState.Matrix, newStateMatrix, 9);
             
             var nextZeroedLocationExpected = GetNextZeroedLocationExpected(currentState.CurrentZeroedCellLocation!, emptyCellMovement);
             
-            //swap the values
+            newStateMatrix[currentState.CurrentZeroedCellLocation!.Y, currentState.CurrentZeroedCellLocation!.X] = 
+                newStateMatrix[nextZeroedLocationExpected.Y, nextZeroedLocationExpected.X];
             
-            (newStateMatrix[currentState.CurrentZeroedCellLocation!.Y, currentState.CurrentZeroedCellLocation!.X], newStateMatrix[nextZeroedLocationExpected.Y, nextZeroedLocationExpected.X]) = 
-                (newStateMatrix[nextZeroedLocationExpected.Y, nextZeroedLocationExpected.X], newStateMatrix[currentState.CurrentZeroedCellLocation!.Y, currentState.CurrentZeroedCellLocation!.X]);
+            newStateMatrix[nextZeroedLocationExpected.Y, nextZeroedLocationExpected.X] = 0;
 
-            return new StateModel(currentState.Matrix, 
+            return new StateModel(newStateMatrix, 
                 nextZeroedLocationExpected, 
                 currentState.CurrentZeroedCellLocation!);
         }

@@ -5,9 +5,9 @@
     {
         private static void Main(string[] args)
         {
-            IA.Start(new List<int>()
+            IA.Start(new List<int>
             {
-                2, 7, 5, 0, 8, 4, 3, 1, 6
+                2, 5, 3, 1, 0, 6, 4, 7, 8
             });
         }
     }

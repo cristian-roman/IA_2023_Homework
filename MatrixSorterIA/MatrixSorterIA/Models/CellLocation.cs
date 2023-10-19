@@ -3,8 +3,8 @@
 public class CellLocation
 {
     //step 1 - create the state model
-    public int X { get; set; }
-    public int Y { get; set; }
+    public int X { get; }
+    public int Y { get; }
         
     public CellLocation(int x, int y)
     {
