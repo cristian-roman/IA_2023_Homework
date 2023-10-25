@@ -33,7 +33,7 @@ namespace MatrixSorterIA
                 }
             }
             //Iddfs(_initialState!);
-            AStarBfs(_initialState, HammingDistanceHeuristic);
+            AStarBfs(_initialState, ManhattanDistanceHeuristic);
         }
 
         private static void Iddfs(StateModel initialState)
