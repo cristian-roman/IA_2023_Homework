@@ -158,7 +158,7 @@ namespace MatrixSorterIA
             };
         }
         
-        private static int ManhattanHeuristic(StateModel state, StateModel finalState)
+        private static int ManhattanDistanceHeuristic(StateModel state, StateModel finalState)
         {
             var sum = 0;
             
@@ -186,7 +186,7 @@ namespace MatrixSorterIA
             throw new Exception("Element not found");
         }
 
-        private static int HammingDistance(StateModel state, StateModel finalState)
+        private static int HammingDistanceHeuristic(StateModel state, StateModel finalState)
         {
             var ans = 0;
             for(var i = 0; i < 3; i++)
@@ -199,6 +199,66 @@ namespace MatrixSorterIA
             }
 
             return ans;
+        }
+        
+        private static double EuclideanDistanceHeuristic(StateModel state, StateModel finalState)
+        {
+            var sum = 0d;
+            
+            for (var i = 0; i < 3; i++)
+            for (var j = 0; j < 3; j++)
+            {
+                var currentElement = state.Matrix[i, j];
+                if (currentElement == 0)
+                    continue;
+
+                var expectedLocation = GetExpectedLocation(currentElement, finalState);
+                sum += Math.Sqrt(Math.Pow(expectedLocation.X - j, 2) + Math.Pow(expectedLocation.Y - i, 2));
+            }
+
+            return (int)sum;
+        }
+
+        private static void AStarBfs(StateModel initialState, Func<StateModel, StateModel, int> heuristic)
+        {
+            var visited = new HashSet<StateModel>();
+            var lengths = new Dictionary<StateModel, int>();
+            var queue = new PriorityQueue<StateModel, int>();
+            
+            queue.Enqueue(initialState, 0);
+            lengths.Add(initialState, 0);
+                
+            while (queue.Count > 0)
+            {
+                var currentState = queue.Dequeue();
+                if(visited.Contains(currentState))
+                    continue;
+                visited.Add(currentState);
+
+                if (currentState.IsFinalState())
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Found solution:");
+                    Console.WriteLine(currentState);
+                    return;
+                }
+
+                foreach (var direction in Enum.GetValues(typeof(Direction)))
+                {
+                    var nextState = ToNextState(currentState, (Direction) direction);
+                    if (nextState == null || visited.Contains(nextState))
+                        continue;
+                        
+                    var nextStateDistance = ManhattanDistanceHeuristic(nextState, _initialState!); //minimizarea de la 2  -- SCHIMBA
+                    
+                    queue.Enqueue(nextState, -(nextStateDistance + lengths[currentState]));
+                    
+                    if(lengths.TryGetValue(nextState, out var traveledDistance))
+                        lengths[nextState] = Math.Min(nextStateDistance + traveledDistance, lengths[nextState]);
+                    else
+                        lengths.Add(nextState, nextStateDistance + lengths[currentState]);
+                }
+            }
         }
     }
 }
