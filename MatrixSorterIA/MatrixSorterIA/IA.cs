@@ -35,9 +35,40 @@ namespace MatrixSorterIA
                 }
             }
             _numberOfMoves = 0;
-            //Iddfs(_initialState!);
-            //AStarBfs(_initialState, EuclideanDistanceHeuristic);
+
+            Console.WriteLine("Iddfs summary:");
+            var watch = Stopwatch.StartNew();
+            Iddfs(_initialState!);
+            watch.Stop();
+            Console.WriteLine("Time elapsed: " + watch.ElapsedMilliseconds + "ms");
+            
+            Console.WriteLine();
+            Console.WriteLine("BfsGreedy with EuclideanDistance heuristic summary:");
+            watch = Stopwatch.StartNew();
             BfsGreedy(_initialState, EuclideanDistanceHeuristic);
+            watch.Stop();
+            Console.WriteLine("Time elapsed: " + watch.ElapsedMilliseconds + "ms");
+            
+            Console.WriteLine();
+            Console.WriteLine("BfsGreedy with ManhattanDistance heuristic summary:");
+            watch = Stopwatch.StartNew();
+            BfsGreedy(_initialState, ManhattanDistanceHeuristic);
+            watch.Stop();
+            Console.WriteLine("Time elapsed: " + watch.ElapsedMilliseconds + "ms");
+            
+            Console.WriteLine();
+            Console.WriteLine("BfsGreedy with HammingDistance heuristic summary:");
+            watch = Stopwatch.StartNew();
+            BfsGreedy(_initialState, HammingDistanceHeuristic);
+            watch.Stop();
+            Console.WriteLine("Time elapsed: " + watch.ElapsedMilliseconds + "ms");
+            
+            Console.WriteLine();
+            Console.WriteLine("AStarBfs summary:");
+            watch = Stopwatch.StartNew();
+            AStarBfs(_initialState, EuclideanDistanceHeuristic);
+            watch.Stop();
+            Console.WriteLine("Time elapsed: " + watch.ElapsedMilliseconds + "ms");
         }
 
         private static void Iddfs(StateModel initialState)
@@ -51,9 +82,9 @@ namespace MatrixSorterIA
                 if (solution == null) continue;
                 
                 
-                Console.WriteLine();
                 Console.WriteLine("Found solution:");
-                Console.WriteLine(solution);
+                Console.Write(solution);
+                Console.WriteLine("Number of moves: " + depth);
                 return;
             }
             
@@ -268,9 +299,8 @@ namespace MatrixSorterIA
 
                 if (currentState.IsFinalState())
                 {
-                    Console.WriteLine();
                     Console.WriteLine("Found solution:");
-                    Console.WriteLine(currentState);
+                    Console.Write(currentState);
                     _numberOfMoves = visited[currentState];
                     Console.WriteLine("Number of moves: " + _numberOfMoves);
                     return;
@@ -314,9 +344,8 @@ namespace MatrixSorterIA
 
                 if (currentState.IsFinalState())
                 {
-                    Console.WriteLine();
                     Console.WriteLine("Found solution:");
-                    Console.WriteLine(currentState);
+                    Console.Write(currentState);
                     _numberOfMoves = visited[currentState];
                     Console.WriteLine("Number of moves: " + _numberOfMoves);
                     return;
