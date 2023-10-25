@@ -168,7 +168,7 @@ namespace MatrixSorterIA
             };
         }
 
-        delegate int HeuristicFunction(StateModel state, StateModel finalState);
+        private delegate int HeuristicFunction(StateModel state, StateModel finalState);
 
         private static int CalculateHeuristicScore(StateModel state, HeuristicFunction heuristicFunction)
         {
@@ -241,7 +241,7 @@ namespace MatrixSorterIA
             return (int)sum;
         }
 
-        private static void AStarBfs(StateModel initialState, Func<StateModel, StateModel, int> heuristic)
+        private static void AStarBfs(StateModel initialState, HeuristicFunction heuristic)
         {
             var visited = new HashSet<StateModel>();
             var lengths = new Dictionary<StateModel, int>();
@@ -271,7 +271,7 @@ namespace MatrixSorterIA
                     if (nextState == null || visited.Contains(nextState))
                         continue;
                         
-                    var nextStateDistance = ManhattanDistanceHeuristic(nextState, _initialState!); //minimizarea de la 2  -- SCHIMBA
+                    var nextStateDistance = CalculateHeuristicScore(nextState, heuristic);
                     
                     queue.Enqueue(nextState, -(nextStateDistance + lengths[currentState]));
                     
