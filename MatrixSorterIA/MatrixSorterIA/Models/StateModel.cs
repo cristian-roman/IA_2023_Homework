@@ -126,9 +126,9 @@ public class StateModel
     public static StateModel GetFinalStateWithZeroOnPosition(CellLocation cellLocation)
     {
         var newMatrix = new int[3,3];
-        for (int i = 0; i < 3; i++)
+        for (var i = 0; i < 3; i++)
         {
-            for (int j = 0; j < 3; j++)
+            for (var j = 0; j < 3; j++)
             {
                 if (cellLocation.X == j && cellLocation.Y == i)
                     newMatrix[i, j] = 0;
@@ -139,5 +139,18 @@ public class StateModel
             }
         }
         return new StateModel(newMatrix);
+    }
+
+    public StateModel GetPreviousState()
+    {
+        if(PreviousZeroedCellLocation == null || CurrentZeroedCellLocation == null)
+            return this;
+        //swap  the location of previous zeroed cell with the current one
+        
+        var newMatrix = (int[,])Matrix.Clone();
+        newMatrix[PreviousZeroedCellLocation!.Y, PreviousZeroedCellLocation.X] = 0;
+        newMatrix[CurrentZeroedCellLocation!.Y, CurrentZeroedCellLocation.X] = Matrix[PreviousZeroedCellLocation.Y, PreviousZeroedCellLocation.X];
+        
+        return new StateModel(newMatrix, PreviousZeroedCellLocation, CurrentZeroedCellLocation);
     }
 }

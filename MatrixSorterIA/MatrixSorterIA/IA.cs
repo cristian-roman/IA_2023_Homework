@@ -11,6 +11,8 @@ namespace MatrixSorterIA
         private static IList<StateModel>? _finalStateModels;
         private delegate int HeuristicFunction(StateModel state, StateModel finalState);
 
+        private static int _numberOfMoves;
+
         private enum Direction
         {
             Up,
@@ -32,8 +34,10 @@ namespace MatrixSorterIA
                     _finalStateModels.Add(StateModel.GetFinalStateWithZeroOnPosition(zeroCellLocation));
                 }
             }
+            _numberOfMoves = 0;
             //Iddfs(_initialState!);
-            AStarBfs(_initialState, ManhattanDistanceHeuristic);
+            //AStarBfs(_initialState, EuclideanDistanceHeuristic);
+            BfsGreedy(_initialState, EuclideanDistanceHeuristic);
         }
 
         private static void Iddfs(StateModel initialState)
@@ -224,7 +228,7 @@ namespace MatrixSorterIA
             return ans;
         }
         
-        private static double EuclideanDistanceHeuristic(StateModel state, StateModel finalState)
+        private static int EuclideanDistanceHeuristic(StateModel state, StateModel finalState)
         {
             var sum = 0d;
             
@@ -242,9 +246,54 @@ namespace MatrixSorterIA
             return (int)sum;
         }
 
+        private static void BfsGreedy(StateModel initialState, HeuristicFunction heuristicFunction)
+        {
+            var visited = new Dictionary<StateModel, int>();
+            var queue = new PriorityQueue<StateModel, int>();
+            
+            queue.Enqueue(initialState, 0);
+                
+            while (queue.Count > 0)
+            {
+                var currentState = queue.Dequeue();
+                if(visited.ContainsKey(currentState))
+                    continue;
+
+                var parentState = currentState.GetPreviousState();
+
+                if(parentState.Equals(currentState))
+                    visited.Add(currentState, 0);
+                else
+                    visited.Add(currentState, visited[parentState] + 1);
+
+                if (currentState.IsFinalState())
+                {
+                    Console.WriteLine();
+                    Console.WriteLine("Found solution:");
+                    Console.WriteLine(currentState);
+                    _numberOfMoves = visited[currentState];
+                    Console.WriteLine("Number of moves: " + _numberOfMoves);
+                    return;
+                }
+
+                foreach (var direction in Enum.GetValues(typeof(Direction)))
+                {
+                    var nextState = ToNextState(currentState, (Direction) direction);
+                    if (nextState == null || visited.ContainsKey(nextState))
+                        continue;
+                        
+                    var nextStateDistance = CalculateHeuristicScore(nextState, heuristicFunction);
+                    
+                    queue.Enqueue(nextState, nextStateDistance);
+                }
+            }
+            
+            Console.WriteLine("No solution found");
+        }
+
         private static void AStarBfs(StateModel initialState, HeuristicFunction heuristic)
         {
-            var visited = new HashSet<StateModel>();
+            var visited = new Dictionary<StateModel, int>();
             var lengths = new Dictionary<StateModel, int>();
             var queue = new PriorityQueue<StateModel, int>();
             
@@ -254,22 +303,29 @@ namespace MatrixSorterIA
             while (queue.Count > 0)
             {
                 var currentState = queue.Dequeue();
-                if(visited.Contains(currentState))
+                if(visited.ContainsKey(currentState))
                     continue;
-                visited.Add(currentState);
+                
+                var parentState = currentState.GetPreviousState();
+                if(parentState.Equals(currentState))
+                    visited.Add(currentState, 0);
+                else
+                    visited.Add(currentState, visited[parentState] + 1);
 
                 if (currentState.IsFinalState())
                 {
                     Console.WriteLine();
                     Console.WriteLine("Found solution:");
                     Console.WriteLine(currentState);
+                    _numberOfMoves = visited[currentState];
+                    Console.WriteLine("Number of moves: " + _numberOfMoves);
                     return;
                 }
 
                 foreach (var direction in Enum.GetValues(typeof(Direction)))
                 {
                     var nextState = ToNextState(currentState, (Direction) direction);
-                    if (nextState == null || visited.Contains(nextState))
+                    if (nextState == null || visited.ContainsKey(nextState))
                         continue;
                         
                     var nextStateDistance = CalculateHeuristicScore(nextState, heuristic);
