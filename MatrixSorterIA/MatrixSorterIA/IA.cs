@@ -36,7 +36,7 @@ namespace MatrixSorterIA
             AStarBfs(_initialState, HammingDistanceHeuristic);
         }
 
-        private static void Iddfs(StateModel initialState)
+        public static void Iddfs(StateModel initialState)
         {
             foreach (var depth in Enumerable.Range(0, MaxDepth))
             {
@@ -50,6 +50,7 @@ namespace MatrixSorterIA
                 Console.WriteLine();
                 Console.WriteLine("Found solution:");
                 Console.WriteLine(solution);
+                Console.WriteLine($"Solution length: {depth}");
                 return;
             }
             
