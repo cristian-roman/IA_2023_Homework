@@ -122,4 +122,22 @@ public class StateModel
         }
         return hashBuilder.ToString().GetHashCode();
     }
+
+    public static StateModel GetFinalStateWithZeroOnPosition(CellLocation cellLocation)
+    {
+        var newMatrix = new int[3,3];
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (cellLocation.X == j && cellLocation.Y == i)
+                    newMatrix[i, j] = 0;
+                else if (cellLocation.Y < i || cellLocation.Y == i && cellLocation.X < j)
+                    newMatrix[i, j] = i * 3 + j;
+                else if (cellLocation.Y > i || cellLocation.Y == i && cellLocation.X > j)
+                    newMatrix[i, j] = i * 3 + j + 1;
+            }
+        }
+        return new StateModel(newMatrix);
+    }
 }

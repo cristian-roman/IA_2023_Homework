@@ -7,6 +7,7 @@ namespace MatrixSorterIA
     public static class IA
     {
         private const int MaxDepth = 10000;
+        private static IList<StateModel> finalStateModels;
         private enum Direction
         {
             Up,
@@ -19,6 +20,15 @@ namespace MatrixSorterIA
         public static void Start(IEnumerable<int> input)
         {
             _initialState = new StateModel(TurnInputToMatrix(input));
+            finalStateModels = new List<StateModel>();
+            for(int i = 0; i < 3; i++)
+            {
+                for(int j = 0; j < 3; j++)
+                {
+                    CellLocation zeroCellLocation = new CellLocation(j, i);
+                    finalStateModels.Add(StateModel.GetFinalStateWithZeroOnPosition(zeroCellLocation));
+                }
+            }
             Iddfs(_initialState!);
         }
 
@@ -157,6 +167,18 @@ namespace MatrixSorterIA
                 _ => throw new Exception("Invalid direction")
             };
         }
+
+        delegate int HeuristicFunction(StateModel state, StateModel finalState);
+
+        private static int CalculateHeuristicScore(StateModel state, HeuristicFunction heuristicFunction)
+        {
+            int score = heuristicFunction(state, finalStateModels[0]);
+            for(int i = 1; i < finalStateModels.Count; i++)
+            {
+                score = Math.Min(score, heuristicFunction(state, finalStateModels[i]));
+            }
+            return score;
+        }
         
         private static int ManhattanHeuristic(StateModel state, StateModel finalState)
         {
@@ -200,5 +222,6 @@ namespace MatrixSorterIA
 
             return ans;
         }
+
     }
 }

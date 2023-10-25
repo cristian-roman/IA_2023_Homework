@@ -13,3 +13,17 @@ C:\Users\roman\[DEV]\IA_2023\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorter
 C:\Users\roman\[DEV]\IA_2023\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\MatrixSorterIA.pdb
 C:\Users\roman\[DEV]\IA_2023\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\MatrixSorterIA.genruntimeconfig.cache
 C:\Users\roman\[DEV]\IA_2023\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\ref\MatrixSorterIA.dll
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\bin\Debug\net7.0\MatrixSorterIA.exe
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\bin\Debug\net7.0\MatrixSorterIA.deps.json
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\bin\Debug\net7.0\MatrixSorterIA.runtimeconfig.json
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\bin\Debug\net7.0\MatrixSorterIA.dll
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\bin\Debug\net7.0\MatrixSorterIA.pdb
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\MatrixSorterIA.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\MatrixSorterIA.AssemblyInfoInputs.cache
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\MatrixSorterIA.AssemblyInfo.cs
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\MatrixSorterIA.csproj.CoreCompileInputs.cache
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\MatrixSorterIA.dll
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\refint\MatrixSorterIA.dll
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\MatrixSorterIA.pdb
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\MatrixSorterIA.genruntimeconfig.cache
+C:\Users\ioana\OneDrive\Desktop\anul 3 sem 1\AI\IA_2023_First_Homeworks\MatrixSorterIA\MatrixSorterIA\obj\Debug\net7.0\ref\MatrixSorterIA.dll
