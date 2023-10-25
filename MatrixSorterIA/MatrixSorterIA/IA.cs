@@ -157,5 +157,33 @@ namespace MatrixSorterIA
                 _ => throw new Exception("Invalid direction")
             };
         }
+        
+        private static int ManhattanHeuristic(StateModel state, StateModel finalState)
+        {
+            var sum = 0;
+            
+            for (var i = 0; i < 3; i++)
+            for (var j = 0; j < 3; j++)
+            {
+                var currentElement = state.Matrix[i, j];
+                if (currentElement == 0)
+                    continue;
+
+                var expectedLocation = GetExpectedLocation(currentElement, finalState);
+                sum += Math.Abs(expectedLocation.X - j) + Math.Abs(expectedLocation.Y - i);
+            }
+
+            return sum;
+        }
+        
+        private static CellLocation GetExpectedLocation(int element, StateModel finalState)
+        {
+            for (var i = 0; i < 3; i++)
+            for (var j = 0; j < 3; j++)
+                if (finalState.Matrix[i, j] == element)
+                    return new CellLocation(j, i);
+
+            throw new Exception("Element not found");
+        }
     }
 }
