@@ -7,7 +7,10 @@ namespace MatrixSorterIA
     public static class IA
     {
         private const int MaxDepth = 10000;
-        private static IList<StateModel> finalStateModels;
+        
+        private static IList<StateModel>? _finalStateModels;
+        private delegate int HeuristicFunction(StateModel state, StateModel finalState);
+
         private enum Direction
         {
             Up,
@@ -20,16 +23,17 @@ namespace MatrixSorterIA
         public static void Start(IEnumerable<int> input)
         {
             _initialState = new StateModel(TurnInputToMatrix(input));
-            finalStateModels = new List<StateModel>();
-            for(int i = 0; i < 3; i++)
+            _finalStateModels = new List<StateModel>();
+            for(var i = 0; i < 3; i++)
             {
-                for(int j = 0; j < 3; j++)
+                for(var j = 0; j < 3; j++)
                 {
-                    CellLocation zeroCellLocation = new CellLocation(j, i);
-                    finalStateModels.Add(StateModel.GetFinalStateWithZeroOnPosition(zeroCellLocation));
+                    var zeroCellLocation = new CellLocation(j, i);
+                    _finalStateModels.Add(StateModel.GetFinalStateWithZeroOnPosition(zeroCellLocation));
                 }
             }
-            Iddfs(_initialState!);
+            //Iddfs(_initialState!);
+            AStarBfs(_initialState, HammingDistanceHeuristic);
         }
 
         private static void Iddfs(StateModel initialState)
@@ -167,15 +171,12 @@ namespace MatrixSorterIA
                 _ => throw new Exception("Invalid direction")
             };
         }
-
-        private delegate int HeuristicFunction(StateModel state, StateModel finalState);
-
         private static int CalculateHeuristicScore(StateModel state, HeuristicFunction heuristicFunction)
         {
-            int score = heuristicFunction(state, finalStateModels[0]);
-            for(int i = 1; i < finalStateModels.Count; i++)
+            var score = heuristicFunction(state, _finalStateModels![0]);
+            for(var i = 1; i < _finalStateModels.Count; i++)
             {
-                score = Math.Min(score, heuristicFunction(state, finalStateModels[i]));
+                score = Math.Min(score, heuristicFunction(state, _finalStateModels[i]));
             }
             return score;
         }
@@ -191,14 +192,14 @@ namespace MatrixSorterIA
                 if (currentElement == 0)
                     continue;
 
-                var expectedLocation = GetExpectedLocation(currentElement, finalState);
+                var expectedLocation = SearchCellInFinalStateModel(currentElement, finalState);
                 sum += Math.Abs(expectedLocation.X - j) + Math.Abs(expectedLocation.Y - i);
             }
 
             return sum;
         }
         
-        private static CellLocation GetExpectedLocation(int element, StateModel finalState)
+        private static CellLocation SearchCellInFinalStateModel(int element, StateModel finalState)
         {
             for (var i = 0; i < 3; i++)
             for (var j = 0; j < 3; j++)
@@ -234,7 +235,7 @@ namespace MatrixSorterIA
                 if (currentElement == 0)
                     continue;
 
-                var expectedLocation = GetExpectedLocation(currentElement, finalState);
+                var expectedLocation = SearchCellInFinalStateModel(currentElement, finalState);
                 sum += Math.Sqrt(Math.Pow(expectedLocation.X - j, 2) + Math.Pow(expectedLocation.Y - i, 2));
             }
 
@@ -281,6 +282,8 @@ namespace MatrixSorterIA
                         lengths.Add(nextState, nextStateDistance + lengths[currentState]);
                 }
             }
+            
+            Console.WriteLine("No solution found");
         }
 
     }

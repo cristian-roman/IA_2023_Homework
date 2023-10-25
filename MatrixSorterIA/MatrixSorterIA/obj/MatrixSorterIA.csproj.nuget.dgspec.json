@@ -1,32 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\ioana\\OneDrive\\Desktop\\anul 3 sem 1\\AI\\IA_2023_First_Homeworks\\MatrixSorterIA\\MatrixSorterIA\\MatrixSorterIA.csproj": {}
+    "C:\\Users\\roman\\[DEV]\\IA_2023\\IA_2023_First_Homeworks\\MatrixSorterIA\\MatrixSorterIA\\MatrixSorterIA.csproj": {}
   },
   "projects": {
-    "C:\\Users\\ioana\\OneDrive\\Desktop\\anul 3 sem 1\\AI\\IA_2023_First_Homeworks\\MatrixSorterIA\\MatrixSorterIA\\MatrixSorterIA.csproj": {
+    "C:\\Users\\roman\\[DEV]\\IA_2023\\IA_2023_First_Homeworks\\MatrixSorterIA\\MatrixSorterIA\\MatrixSorterIA.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\ioana\\OneDrive\\Desktop\\anul 3 sem 1\\AI\\IA_2023_First_Homeworks\\MatrixSorterIA\\MatrixSorterIA\\MatrixSorterIA.csproj",
+        "projectUniqueName": "C:\\Users\\roman\\[DEV]\\IA_2023\\IA_2023_First_Homeworks\\MatrixSorterIA\\MatrixSorterIA\\MatrixSorterIA.csproj",
         "projectName": "MatrixSorterIA",
-        "projectPath": "C:\\Users\\ioana\\OneDrive\\Desktop\\anul 3 sem 1\\AI\\IA_2023_First_Homeworks\\MatrixSorterIA\\MatrixSorterIA\\MatrixSorterIA.csproj",
-        "packagesPath": "C:\\Users\\ioana\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\ioana\\OneDrive\\Desktop\\anul 3 sem 1\\AI\\IA_2023_First_Homeworks\\MatrixSorterIA\\MatrixSorterIA\\obj\\",
+        "projectPath": "C:\\Users\\roman\\[DEV]\\IA_2023\\IA_2023_First_Homeworks\\MatrixSorterIA\\MatrixSorterIA\\MatrixSorterIA.csproj",
+        "packagesPath": "C:\\Users\\roman\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\roman\\[DEV]\\IA_2023\\IA_2023_First_Homeworks\\MatrixSorterIA\\MatrixSorterIA\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\ioana\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\roman\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net7.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -60,7 +53,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Users\\roman\\.dotnet\\sdk\\7.0.306\\RuntimeIdentifierGraph.json"
         }
       }
     }
