@@ -185,5 +185,20 @@ namespace MatrixSorterIA
 
             throw new Exception("Element not found");
         }
+
+        private static int HammingDistance(StateModel state, StateModel finalState)
+        {
+            var ans = 0;
+            for(var i = 0; i < 3; i++)
+            for (var j = 0; j < 3; j++)
+            {
+                if (finalState.Matrix[i, j] != state.Matrix[i, j])
+                {
+                    ans++;
+                }
+            }
+
+            return ans;
+        }
     }
 }
