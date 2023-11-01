@@ -27,6 +27,7 @@ public static class Solver
             
             cell.IsFixed = false;
             model.UpdateOtherDomains(cell, true);
+            cell.Value = 0;
         }
     }
 
