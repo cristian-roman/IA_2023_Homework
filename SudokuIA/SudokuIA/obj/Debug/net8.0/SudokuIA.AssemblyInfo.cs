@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SudokuIA")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f9b40e91bcbef9daf9c3c169589b051916d79575")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+50034a058adc1437a178d61e02365f1f233468c5")]
 [assembly: System.Reflection.AssemblyProductAttribute("SudokuIA")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SudokuIA")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

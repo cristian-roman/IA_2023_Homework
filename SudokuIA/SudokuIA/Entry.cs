@@ -9,18 +9,22 @@ namespace SudokuIA
         public static void Main(string[] args)
         {
             var instance = LoadInstance("instance_2.txt");
+            Console.WriteLine(instance);
             
+            Console.WriteLine("\n\n\n\n\n");
+            
+            Solver.ForwardChecking(instance);
             Console.WriteLine(instance);
         }
 
         private static SudokuModel LoadInstance(string fileName)
         {
-            var sudokuModel = new SudokuModel();
+            var table = new Cell[9, 9];
             
             using var reader = new StreamReader(InstancesPath + '\\' + fileName);
             
-            for(var row = 0; row < 9; row++)
-            for (var column = 0; column < 9; column++)
+            for(short row = 0; row < 9; row++)
+            for (short column = 0; column < 9; column++)
             {
                 var line = reader.ReadLine();
                 if (string.IsNullOrEmpty(line))
@@ -33,10 +37,10 @@ namespace SudokuIA
                 var value = short.Parse(components[0]);
                 var isGrayCellFlag = components[1] == GrayCellFlag;
 
-                sudokuModel.Table[row, column] = new Cell(value, isGrayCellFlag);
+                table[row, column] = new Cell(row, column, value, isGrayCellFlag);
             }
 
-            return sudokuModel;
+            return new SudokuModel(table);
         }
     }
 }
