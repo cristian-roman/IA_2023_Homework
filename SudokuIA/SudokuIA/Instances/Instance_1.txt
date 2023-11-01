@@ -1,0 +1,90 @@
+﻿0 isEven
+0 isNotEven
+4 isEven
+1 isNotEven
+0 isNotEven
+0 isNotEven
+0 isEven
+0 isNotEven
+0 isEven
+
+0 isNotEven
+0 isEven
+6 isEven
+0 isEven
+0 isNotEven
+5 isNotEven
+0 isNotEven
+0 isNotEven
+0 isEven
+
+0 isNotEven
+0 isNotEven
+0 isNotEven
+2 isEven
+0 isEven
+0 isEven
+0 isEven
+4 isEven
+3 isNotEven
+0 isNotEven
+
+0 isNotEven
+8 isEven
+0 isNotEven
+0 isNotEven
+0 isEven
+0 isEven
+0 isNotEven
+4 isEven
+0 isNotEven
+
+0 isEven
+0 isEven
+0 isNotEven
+0 isNotEven
+7 isNotEven
+0 isNotEven
+0 isNotEven
+0 isEven
+2 isEven
+
+0 isEven
+9 isNotEven
+1 isNotEven
+0 isEven
+0 isEven
+3 isNotEven
+6 isEven
+0 isNotEven
+5 isNotEven
+
+0 isEven
+0 isNotEven
+2 isEven
+0 isNotEven
+0 isNotEven
+0 isNotEven
+0 isEven
+0 isEven
+7 isNotEven
+
+0 isNotEven
+0 isNotEven
+7 isNotEven
+6 isEven
+1 isNotEven
+0 isEven
+0 isNotEven
+0 isEven
+0 isEven
+
+0 isNotEven
+6 isEven
+0 isEven
+7 isNotEven
+2 isEven
+0 isEven
+5 isNotEven
+0 isNotEven
+9 isNotEven

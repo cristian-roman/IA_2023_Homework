@@ -1,0 +1,15 @@
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\bin\Debug\net7.0\SudokuIA.exe
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\bin\Debug\net7.0\SudokuIA.deps.json
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\bin\Debug\net7.0\SudokuIA.runtimeconfig.json
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\bin\Debug\net7.0\SudokuIA.dll
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\bin\Debug\net7.0\SudokuIA.pdb
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\obj\Debug\net7.0\SudokuIA.csproj.AssemblyReference.cache
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\obj\Debug\net7.0\SudokuIA.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\obj\Debug\net7.0\SudokuIA.AssemblyInfoInputs.cache
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\obj\Debug\net7.0\SudokuIA.AssemblyInfo.cs
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\obj\Debug\net7.0\SudokuIA.csproj.CoreCompileInputs.cache
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\obj\Debug\net7.0\SudokuIA.dll
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\obj\Debug\net7.0\refint\SudokuIA.dll
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\obj\Debug\net7.0\SudokuIA.pdb
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\obj\Debug\net7.0\SudokuIA.genruntimeconfig.cache
+C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\obj\Debug\net7.0\ref\SudokuIA.dll
