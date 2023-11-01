@@ -1,89 +1,89 @@
-﻿0 isGrayCell
+﻿1 isSimpleCell
 0 isGrayCell
-8 isGrayCell
-0 isGrayCell
-0 isSimpleCell
-0 isSimpleCell
-0 isSimpleCell
-1 isSimpleCell
-9 isSimpleCell
-
-7 isSimpleCell
-0 isSimpleCell
-0 isSimpleCell
-1 isSimpleCell
-0 isGrayCell
-0 isGrayCell
-0 isGrayCell
-0 isGrayCell
-0 isSimpleCell
-
-0 isGrayCell
-3 isSimpleCell
-0 isSimpleCell
-0 isSimpleCell
-6 isGrayCell
-0 isSimpleCell
-0 isGrayCell
-0 isGrayCell
-0 isSimpleCell
-
-1 isSimpleCell
-0 isGrayCell
-0 isGrayCell
-0 isSimpleCell
-9 isSimpleCell
-7 isSimpleCell
-5 isSimpleCell
-6 isGrayCell
-0 isGrayCell
-
-0 isSimpleCell
-0 isGrayCell
-0 isSimpleCell
 0 isGrayCell
 4 isGrayCell
-0 isGrayCell
+2 isGrayCell
 0 isSimpleCell
-0 isSimpleCell
-0 isSimpleCell
-
 9 isSimpleCell
-6 isGrayCell
-0 isSimpleCell
-0 isGrayCell
 0 isSimpleCell
 0 isSimpleCell
-3 isSimpleCell
-0 isGrayCell
-0 isGrayCell
 
 0 isSimpleCell
 5 isSimpleCell
+4 isGrayCell
+3 isSimpleCell
+6 isGrayCell
 0 isSimpleCell
-0 isGrayCell
-0 isSimpleCell
-0 isGrayCell
-2 isGrayCell
-7 isSimpleCell
-0 isGrayCell
-
 0 isGrayCell
 1 isSimpleCell
 0 isGrayCell
-5 isSimpleCell
-7 isSimpleCell
-0 isGrayCell
-9 isSimpleCell
+
 0 isSimpleCell
-4 isGrayCell
+0 isSimpleCell
+0 isGrayCell
+0 isGrayCell
+0 isSimpleCell
+0 isSimpleCell
+0 isSimpleCell
+6 isGrayCell
+0 isGrayCell
+
+0 isSimpleCell
+7 isSimpleCell
+0 isSimpleCell
+0 isGrayCell
+1 isSimpleCell
+0 isGrayCell
+0 isGrayCell
+2 isGrayCell
+9 isSimpleCell
 
 0 isGrayCell
 0 isSimpleCell
 6 isGrayCell
-0 isSimpleCell
-2 isGrayCell
+0 isGrayCell
 0 isSimpleCell
 8 isGrayCell
 0 isSimpleCell
+5 isSimpleCell
+7 isSimpleCell
+
+2 isGrayCell
+8 isGrayCell
+0 isSimpleCell
+0 isSimpleCell
+0 isSimpleCell
+0 isSimpleCell
+0 isGrayCell
+3 isSimpleCell
+6 isGrayCell
+
+0 isSimpleCell
+2 isGrayCell
+0 isSimpleCell
+0 isSimpleCell
+4 isGrayCell
+0 isSimpleCell
+0 isGrayCell
+0 isGrayCell
+0 isSimpleCell
+
+0 isGrayCell
+0 isSimpleCell
+7 isSimpleCell
+5 isSimpleCell
+0 isSimpleCell
+6 isGrayCell
+0 isSimpleCell
+0 isGrayCell
+0 isGrayCell
+
+0 isGrayCell
+0 isGrayCell
+0 isSimpleCell
+0 isSimpleCell
+0 isGrayCell
+0 isGrayCell
+7 isSimpleCell
+9 isSimpleCell
 0 isSimpleCell

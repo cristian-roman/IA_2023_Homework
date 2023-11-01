@@ -5,19 +5,20 @@ public class Cell
     public short Value;
 
     public bool IsFixed => _possibleValues.Count == 1;
-
+    public readonly bool IsGrayedCell;
     private readonly List<short> _possibleValues;
     private short _currentIndex;
-    public Cell(short value, bool isEvenCell)
+    public Cell(short value, bool isGrayCell)
     {
         Value = value;
         _possibleValues = new List<short>();
+        IsGrayedCell = isGrayCell;
         if (Value == 0)
         {
             short min = 1;
             short max = 9;
             short step = 1;
-            if (isEvenCell)
+            if (isGrayCell)
             {
                 min = 2;
                 max = 8;
