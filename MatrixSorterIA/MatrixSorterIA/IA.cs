@@ -9,6 +9,8 @@ namespace MatrixSorterIA
         private const int MaxDepth = 10000;
         
         private static IList<StateModel>? _finalStateModels;
+
+        private static IList<StateModel>? _path;
         private delegate int HeuristicFunction(StateModel state, StateModel finalState);
 
         private static int _numberOfMoves;
@@ -35,40 +37,59 @@ namespace MatrixSorterIA
                 }
             }
             _numberOfMoves = 0;
+            _path = new List<StateModel>();
 
             Console.WriteLine("Iddfs summary:");
             var watch = Stopwatch.StartNew();
             Iddfs(_initialState!);
             watch.Stop();
             Console.WriteLine("Time elapsed: " + watch.ElapsedMilliseconds + "ms");
+            const string iddfsPath = "IddfsAnswer.txt";
+            WriteSolutionStepsToFile(iddfsPath);
             
             Console.WriteLine();
             Console.WriteLine("BfsGreedy with EuclideanDistance heuristic summary:");
             watch = Stopwatch.StartNew();
+            _path = new List<StateModel>();
+            GC.Collect();
             BfsGreedy(_initialState, EuclideanDistanceHeuristic);
             watch.Stop();
             Console.WriteLine("Time elapsed: " + watch.ElapsedMilliseconds + "ms");
+            const string bfsGreedyEuclideanPath = "BfsGreedyEuclideanAnswer.txt";
+            WriteSolutionStepsToFile(bfsGreedyEuclideanPath);
             
             Console.WriteLine();
             Console.WriteLine("BfsGreedy with ManhattanDistance heuristic summary:");
             watch = Stopwatch.StartNew();
+            _path = new List<StateModel>();
+            GC.Collect();
             BfsGreedy(_initialState, ManhattanDistanceHeuristic);
             watch.Stop();
             Console.WriteLine("Time elapsed: " + watch.ElapsedMilliseconds + "ms");
+            const string bfsGreedyManhattanPath = "BfsGreedyManhattanAnswer.txt";
+            WriteSolutionStepsToFile(bfsGreedyManhattanPath);
             
             Console.WriteLine();
             Console.WriteLine("BfsGreedy with HammingDistance heuristic summary:");
             watch = Stopwatch.StartNew();
+            _path = new List<StateModel>();
+            GC.Collect();
             BfsGreedy(_initialState, HammingDistanceHeuristic);
             watch.Stop();
             Console.WriteLine("Time elapsed: " + watch.ElapsedMilliseconds + "ms");
+            const string bfsGreedyHammingPath = "BfsGreedyHammingAnswer.txt";
+            WriteSolutionStepsToFile(bfsGreedyHammingPath);
             
             Console.WriteLine();
             Console.WriteLine("AStarBfs summary:");
             watch = Stopwatch.StartNew();
+            _path = new List<StateModel>();
+            GC.Collect();
             AStarBfs(_initialState, EuclideanDistanceHeuristic);
             watch.Stop();
             Console.WriteLine("Time elapsed: " + watch.ElapsedMilliseconds + "ms");
+            const string aStarBfsPath = "AStarBfsAnswer.txt";
+            WriteSolutionStepsToFile(aStarBfsPath);
         }
 
         private static void Iddfs(StateModel initialState)
@@ -91,10 +112,28 @@ namespace MatrixSorterIA
             Console.WriteLine("No solution found");
         }
 
+        private static void WriteSolutionStepsToFile(string fileName)
+        {
+            if(File.Exists(fileName))
+                fileName = fileName.Replace(".txt", "_2.txt");
+            
+            if(File.Exists(fileName))
+                fileName = fileName.Replace(".txt", "_3.txt");
+            
+            using var writer = new StreamWriter(fileName);
+            for(var i = _path!.Count - 1; i >= 0; i--)
+            { 
+                writer.WriteLine(_path[i]);
+            }
+        }
+
         private static StateModel? DepthLimitedDfs(StateModel currentState, int depth, ISet<StateModel> visited)
         {
             if (currentState.IsFinalState())
+            {
+                _path?.Add(currentState);
                 return currentState;
+            }
 
             if (depth <= 0)
                 return null;
@@ -109,7 +148,10 @@ namespace MatrixSorterIA
                 
                 var solution = DepthLimitedDfs(nextState, depth - 1, visited);
                 if (solution != null)
+                {
+                    _path?.Add(currentState);
                     return solution;
+                }
             }
 
             return null;
@@ -303,6 +345,20 @@ namespace MatrixSorterIA
                     Console.Write(currentState);
                     _numberOfMoves = visited[currentState];
                     Console.WriteLine("Number of moves: " + _numberOfMoves);
+                    
+                    _path?.Add(currentState);
+                    while (!_initialState!.Equals(currentState))
+                    {
+                        parentState = currentState.GetPreviousState();
+                        foreach (var key in visited.Keys.Where(key => key.Equals(parentState)))
+                        {
+                            currentState = key;
+                            break;
+                        }
+                        _path?.Add(currentState);
+                        GC.Collect();
+                    }
+                    
                     return;
                 }
 
@@ -348,6 +404,22 @@ namespace MatrixSorterIA
                     Console.Write(currentState);
                     _numberOfMoves = visited[currentState];
                     Console.WriteLine("Number of moves: " + _numberOfMoves);
+                    
+                    _path?.Add(currentState);
+                    
+                    while (!_initialState!.Equals(currentState))
+                    {
+                        parentState = currentState.GetPreviousState();
+                        foreach (var key in visited.Keys.Where(key => key.Equals(parentState) ))
+                        {
+                            currentState = key;
+                            break;
+                        }
+                        
+                        _path?.Add(currentState);
+                        GC.Collect();
+                    }
+                    
                     return;
                 }
 
