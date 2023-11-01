@@ -132,6 +132,24 @@ public class SudokuModel
         
         return (-1, -1);
     }
+    
+    public (short,short) TryGetNextUnfixedMrvCellPosition()
+    {
+        var numberOfOccurrences = 100;
+        var ans = ((short)-1, (short)-1);
+        
+        for (short row = 0; row < 9; row++)
+        for (short column = 0; column < 9; column++)
+        {
+            if (Table[row, column].IsFixed) continue;
+            if (_domains[(row, column)].Count >= numberOfOccurrences) continue;
+            
+            numberOfOccurrences = _domains[(row, column)].Count;
+            ans = (row, column);
+        }
+        
+        return ans;
+    }
     public override string ToString()
     {
         var sb = new StringBuilder();

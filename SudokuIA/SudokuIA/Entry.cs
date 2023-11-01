@@ -1,4 +1,5 @@
-﻿using SudokuIA.Models;
+﻿using System.Diagnostics;
+using SudokuIA.Models;
 
 namespace SudokuIA
 {
@@ -8,13 +9,29 @@ namespace SudokuIA
         private const string InstancesPath = @"C:\Users\cristian\[DEV]\IA_2023\IA_2023_First_Homeworks\SudokuIA\SudokuIA\Instances";
         public static void Main(string[] args)
         {
-            var instance = LoadInstance("instance_2.txt");
-            Console.WriteLine(instance);
+            var forwardCheckingInstance = LoadInstance("instance_1.txt");
+            Console.WriteLine(forwardCheckingInstance);
             
             Console.WriteLine("\n\n\n\n\n");
             
-            Solver.ForwardChecking(instance);
-            Console.WriteLine(instance);
+            var stopwatch = new Stopwatch();
+            
+            
+            stopwatch.Start();
+            Solver.ForwardChecking(forwardCheckingInstance);
+            stopwatch.Stop();
+            Console.WriteLine("[Forward checking] Solved instance: " + stopwatch.ElapsedMilliseconds + " ms");
+            Console.WriteLine(forwardCheckingInstance);
+            
+            Console.WriteLine("\n\n\n\n\n");
+            
+            var mrvCheckingInstance = LoadInstance("instance_1.txt");
+            stopwatch.Reset();
+            stopwatch.Start();
+            Solver.MrvChecking(mrvCheckingInstance);
+            stopwatch.Stop();
+            Console.WriteLine("[MRV checking] Solved instance: " + stopwatch.ElapsedMilliseconds + " ms");
+            Console.WriteLine(mrvCheckingInstance);
         }
 
         private static SudokuModel LoadInstance(string fileName)
