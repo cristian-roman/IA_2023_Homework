@@ -7,8 +7,8 @@ magic_square = [[2, 7, 6], [9, 5, 1], [4, 3, 8]]
 def is_any_line_in_final_state(current_state):
     for i in range(len(current_state[1])):
         k = 0
-        for j in range(len(current_state[1][0])):
-            if current_state[1][i][j] == current_state[0]:
+        for j in range(3):
+            if current_state[1][i][j] == 3 - current_state[0]:
                 k += 1
         if k == 3:
             return True
@@ -16,10 +16,10 @@ def is_any_line_in_final_state(current_state):
 
 
 def is_any_column_in_final_state(current_state):
-    for j in range(len(current_state[1][0])):
+    for j in range(3):
         k = 0
         for i in range(len(current_state[1])):
-            if current_state[1][i][j] == current_state[0]:
+            if current_state[1][i][j] == 3 - current_state[0]:
                 k += 1
         if k == 3:
             return True
@@ -28,14 +28,14 @@ def is_any_column_in_final_state(current_state):
 
 def is_any_diagonal_in_final_state(current_state):
     k = 0
-    for i in range(len(current_state[1])):
+    for i in range(3):
         if current_state[1][i][i] == current_state[0]:
             k += 1
     if k == 3:
         return True
     k = 0
     for i in range(len(current_state[1])):
-        if current_state[1][i][len(current_state[1]) - i - 1] == current_state[0]:
+        if current_state[1][i][3 - i - 1] == 3 - current_state[0]:
             k += 1
     if k == 3:
         return True
@@ -161,6 +161,8 @@ def minimax(current_state, depth):
                 if value > new_value:
                     value = new_value
                     to_return_state = new_state
+                    if depth == 3:
+                       to_return_state = get_next_state(current_state, (i, j))
     else:
         value = -100
         for i in range(3):
@@ -205,6 +207,10 @@ def play():
             print("Computer's choice is: ", computers_choice)
             state = new_state
 
+    if state[0] == 2:
+        print("You won!")
+    else:
+        print("Computer won!")
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
