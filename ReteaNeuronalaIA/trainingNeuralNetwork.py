@@ -64,20 +64,22 @@ class TrainingNeuralNetwork:
 
         second_hidden_layer_transpose = np.transpose(neurons[1])
 
-        softmax_derivative_with_respect_to_hidden_layer_output = [self.__softmaxDerivative(output_layer[0]),
-                                                                  self.__softmaxDerivative(output_layer[1]),
-                                                                  self.__softmaxDerivative(output_layer[2])]
+        softmax_derivative_with_respect_to_hidden_layer_output = np.array([self.__softmaxDerivative(output_layer[0]),
+                                                                           self.__softmaxDerivative(output_layer[1]),
+                                                                           self.__softmaxDerivative(
+                                                                               output_layer[2])]).reshape(1, 3)
 
-        cost_function_derivative_with_respect_to_softmax = [self.__cross_validation_error_derivative
-                                                            (instance.expected_output[0], output_layer[0]),
-                                                            self.__cross_validation_error_derivative
-                                                            (instance.expected_output[1], output_layer[1]),
-                                                            self.__cross_validation_error_derivative(
-                                                                instance.expected_output[2], output_layer[2])]
+        cost_function_derivative_with_respect_to_softmax = np.array([self.__cross_validation_error_derivative
+                                                                     (instance.expected_output[0], output_layer[0]),
+                                                                     self.__cross_validation_error_derivative
+                                                                     (instance.expected_output[1], output_layer[1]),
+                                                                     self.__cross_validation_error_derivative(
+                                                                         instance.expected_output[2],
+                                                                         output_layer[2])]).reshape(1, 3)
 
         cost_derivative_with_respect_to_second_hidden_layer_output = np.multiply(
             cost_function_derivative_with_respect_to_softmax,
-            softmax_derivative_with_respect_to_hidden_layer_output)
+            softmax_derivative_with_respect_to_hidden_layer_output).reshape(3, 1)
 
         output_layer_delta = (self.learning_rate * np.outer
         (cost_derivative_with_respect_to_second_hidden_layer_output, second_hidden_layer_transpose))
@@ -89,23 +91,25 @@ class TrainingNeuralNetwork:
 
         second_hidden_layer_output_derivative_with_respect_to_reLU = self.weights_list[2]
 
-        reLU_derivative_with_respect_to_first_hidden_layer_output = [self.__reLUDerivative(second_hidden_layer[0]),
-                                                                     self.__reLUDerivative(second_hidden_layer[1]),
-                                                                     self.__reLUDerivative(second_hidden_layer[2]),
-                                                                     self.__reLUDerivative(second_hidden_layer[3]),
-                                                                     self.__reLUDerivative(second_hidden_layer[4]),
-                                                                     self.__reLUDerivative(second_hidden_layer[5]),
-                                                                     self.__reLUDerivative(second_hidden_layer[6]),
-                                                                     self.__reLUDerivative(second_hidden_layer[7])]
+        reLU_derivative_with_respect_to_first_hidden_layer_output = np.array(
+            [self.__reLUDerivative(second_hidden_layer[0]),
+             self.__reLUDerivative(second_hidden_layer[1]),
+             self.__reLUDerivative(second_hidden_layer[2]),
+             self.__reLUDerivative(second_hidden_layer[3]),
+             self.__reLUDerivative(second_hidden_layer[4]),
+             self.__reLUDerivative(second_hidden_layer[5]),
+             self.__reLUDerivative(second_hidden_layer[6])]).reshape(1, 7)
 
-        cost_derivative_with_respect_to_first_hidden_layer_output = np.multiply(
-            np.multiply(cost_derivative_with_respect_to_second_hidden_layer_output,
-                        second_hidden_layer_output_derivative_with_respect_to_reLU),
-            reLU_derivative_with_respect_to_first_hidden_layer_output)
+        multiply_1 = np.dot(cost_derivative_with_respect_to_second_hidden_layer_output.reshape(1, 3),
+                            second_hidden_layer_output_derivative_with_respect_to_reLU)
+
+        cost_derivative_with_respect_to_first_hidden_layer_output = np.outer(
+            reLU_derivative_with_respect_to_first_hidden_layer_output,
+            multiply_1)
 
         second_hidden_layer_delta = (
-                self.learning_rate * np.outer(cost_derivative_with_respect_to_first_hidden_layer_output,
-                                              first_hidden_layer_transpose))
+                self.learning_rate * np.multiply(cost_derivative_with_respect_to_first_hidden_layer_output,
+                                                 first_hidden_layer_transpose))
 
         # First hidden layer backpropagation
         first_hidden_layer = neurons[0]
@@ -114,21 +118,23 @@ class TrainingNeuralNetwork:
 
         first_hidden_layer_output_derivative_with_respect_to_reLU = self.weights_list[1]
 
-        reLU_derivative_with_respect_to_input = [self.__reLUDerivative(first_hidden_layer[0]),
-                                                 self.__reLUDerivative(first_hidden_layer[1]),
-                                                 self.__reLUDerivative(first_hidden_layer[2]),
-                                                 self.__reLUDerivative(first_hidden_layer[3]),
-                                                 self.__reLUDerivative(first_hidden_layer[4]),
-                                                 self.__reLUDerivative(first_hidden_layer[5]),
-                                                 self.__reLUDerivative(first_hidden_layer[6]),
-                                                 self.__reLUDerivative(first_hidden_layer[7])]
-        cost_derivative_with_respect_to_input = np.multiply(np.multiply(
-            cost_derivative_with_respect_to_first_hidden_layer_output,
-            first_hidden_layer_output_derivative_with_respect_to_reLU),
+        reLU_derivative_with_respect_to_input = np.array([self.__reLUDerivative(first_hidden_layer[0]),
+                                                          self.__reLUDerivative(first_hidden_layer[1]),
+                                                          self.__reLUDerivative(first_hidden_layer[2]),
+                                                          self.__reLUDerivative(first_hidden_layer[3]),
+                                                          self.__reLUDerivative(first_hidden_layer[4]),
+                                                          self.__reLUDerivative(first_hidden_layer[5]),
+                                                          self.__reLUDerivative(first_hidden_layer[6])]).reshape(7, 1)
+
+        multiply_2 = np.multiply(cost_derivative_with_respect_to_first_hidden_layer_output,
+                                 first_hidden_layer_output_derivative_with_respect_to_reLU)
+
+        cost_derivative_with_respect_to_input = np.multiply(
+            multiply_2,
             reLU_derivative_with_respect_to_input)
 
         first_hidden_layer_delta = (
-                    self.learning_rate * np.outer(cost_derivative_with_respect_to_input, input_with_bias))
+                self.learning_rate * np.multiply(cost_derivative_with_respect_to_input, input_with_bias))
 
         # Update weights
         self.weights_list[0] -= first_hidden_layer_delta
