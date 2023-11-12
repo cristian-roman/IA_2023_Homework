@@ -9,7 +9,7 @@ class TrainingNeuralNetwork:
     number_of_input_neurons = 7
     number_of_hidden_layers = 2
     number_of_output_neurons = 3
-    learning_rate = 0.1
+    learning_rate = 0.000001
     max_number_of_epochs = 1000
 
     def __init__(self, instances: np.array(Instance)):

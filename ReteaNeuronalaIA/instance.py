@@ -14,6 +14,7 @@ class Instance:
             else:
                 output_vector.append(0)
         self.expected_output = np.array(output_vector).reshape(-1, 1)
+        self.raw_output = expected_output
 
     def __str__(self):
         return f'attributes: {self.attributes}, expected_output: {self.expected_output}'
