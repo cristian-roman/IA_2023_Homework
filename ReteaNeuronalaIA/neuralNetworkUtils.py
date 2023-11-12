@@ -4,9 +4,9 @@ from instance import Instance
 
 class NeuralNetworkUtils:
     @staticmethod
-    def propagate_forward(instance: Instance, weights_list: list[np.array(np.float32)]):
+    def propagate_forward(instance_input: np.array(np.float32), weights_list: list[np.array(np.float32)]):
         # Add the bias to the instance
-        input_with_bias = np.append(instance.attributes, 1)  # bias added on the last position
+        input_with_bias = np.append(instance_input, 1)  # bias added on the last position
 
         # first propagation
         first_hidden_layer = []
@@ -38,14 +38,14 @@ class NeuralNetworkUtils:
 
         output_layer = NeuralNetworkUtils.__softmax(output_layer)
 
-        return output_layer
+        return [first_hidden_layer, second_hidden_layer, output_layer]
 
     @staticmethod
-    def __reLU(x):
-        return max(0, x)
+    def __reLU(neuron_value):  # input: number, output: number
+        return max(0, neuron_value)
 
     @staticmethod
-    def __softmax(output_layer):
+    def __softmax(output_layer) -> np.array(np.float32):  # input: vector, output:vector
         new_output_layer = []
         sum = 0
         for raw_output in output_layer:

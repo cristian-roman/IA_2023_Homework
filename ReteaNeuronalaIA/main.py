@@ -19,4 +19,4 @@ if __name__ == '__main__':
     testing_set = instances[training_instances:]
 
     trainingNeuralNetwork = tnn.TrainingNeuralNetwork(training_set)
-    print(trainingNeuralNetwork.propagate_forward(testing_set[0][0]))
+    trainingNeuralNetwork.train()
