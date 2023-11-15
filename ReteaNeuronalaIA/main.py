@@ -35,3 +35,18 @@ if __name__ == '__main__':
             correct_predictions += 1
 
     print(f'Accuracy: {correct_predictions / testing_instances * 100}%')
+
+    # training
+    correct_predictions = 0
+    for instance in training_set:
+        neurons = tnn.NeuralNetworkUtils.propagate_forward(instance[0].attributes, trainingNeuralNetwork.weights_list)
+        output = neurons[-1]
+        label = -1
+        for i in range(len(output)):
+            if output[i] == max(output):
+                label = i
+                break
+        if label == instance[0].raw_output:
+            correct_predictions += 1
+
+    print(f'Accuracy: {correct_predictions / training_instances * 100}%')
