@@ -2,14 +2,14 @@ import numpy as np
 
 from datasetExtractor import DataSetExtractor
 
-import trainingNeuralNetwork as tnn
+import trainingNeuralNetwork as TNN
 
 if __name__ == '__main__':
     instances = DataSetExtractor.extract()
     np.random.shuffle(instances)
 
     # Split the dataset into training and testing sets
-    training_ratio = 0.8  # 80% of the dataset will be used for training
+    training_ratio = 0.75  # 80% of the dataset will be used for training
 
     total_instances = len(instances)
     training_instances = int(total_instances * training_ratio)
@@ -18,13 +18,13 @@ if __name__ == '__main__':
     training_set = instances[:training_instances]
     testing_set = instances[training_instances:]
 
-    trainingNeuralNetwork = tnn.TrainingNeuralNetwork(training_set)
+    trainingNeuralNetwork = TNN.TrainingNeuralNetwork(training_set)
     trainingNeuralNetwork.train()
 
     # testing
     correct_predictions = 0
     for instance in testing_set:
-        neurons = tnn.NeuralNetworkUtils.propagate_forward(instance[0].attributes, trainingNeuralNetwork.weights_list)
+        neurons = TNN.NNU.propagate_forward(instance[0].attributes, trainingNeuralNetwork.weights_list, trainingNeuralNetwork.biases_list)
         output = neurons[-1]
         label = -1
         for i in range(len(output)):
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     # training
     correct_predictions = 0
     for instance in training_set:
-        neurons = tnn.NeuralNetworkUtils.propagate_forward(instance[0].attributes, trainingNeuralNetwork.weights_list)
+        neurons = TNN.NNU.propagate_forward(instance[0].attributes, trainingNeuralNetwork.weights_list, trainingNeuralNetwork.biases_list)
         output = neurons[-1]
         label = -1
         for i in range(len(output)):

@@ -2,14 +2,14 @@ import numpy as np
 
 from instance import Instance
 
-from neuralNetworkUtils import NeuralNetworkUtils
+from neuralNetworkUtils import NeuralNetworkUtils as NNU
 
 
 class TrainingNeuralNetwork:
     number_of_input_neurons = 7
     number_of_hidden_layers = 2
     number_of_output_neurons = 3
-    learning_rate = 0.000001
+    learning_rate = 0.045
     max_number_of_epochs = 1000
 
     def __init__(self, instances: np.array(Instance)):
@@ -17,149 +17,143 @@ class TrainingNeuralNetwork:
             2 / 3 * self.number_of_input_neurons + self.number_of_output_neurons)
         self.instances = instances
         self.weights_list = []
+        self.biases_list = []
         self.initialize_weights_and_biases()
-
-    @staticmethod
-    def xavier_initialization(number_of_neurons_previous_layer, number_of_neurons_current_layer):
-        variance = 1 / (number_of_neurons_previous_layer + number_of_neurons_current_layer)
-        standard_deviation = np.sqrt(variance)
-        weights = np.random.normal(0, standard_deviation,
-                                   size=(number_of_neurons_current_layer, number_of_neurons_previous_layer + 1))
-        return weights
 
     def initialize_weights_and_biases(self):
         np.random.seed(14)
-        # Initialize 7 random weights for communication between input layer and first hidden layer
-        first_hidden_layer_weights = ((TrainingNeuralNetwork.xavier_initialization
-                                       (self.number_of_input_neurons, self.number_of_neurons_per_hidden_layer))
-                                      .reshape(self.number_of_neurons_per_hidden_layer,
-                                               self.number_of_input_neurons + 1))
+        first_hidden_layer_weights = NNU.he_initialization(self.number_of_input_neurons,
+                                                           self.number_of_neurons_per_hidden_layer)
+        first_hidden_layer_biases = np.random.normal(0, 1, size=(self.number_of_neurons_per_hidden_layer, 1))
 
-        # Initialize 7 random weights for communication between first hidden layer and second hidden layer
-        second_hidden_layer_weights = ((TrainingNeuralNetwork.xavier_initialization
-                                        (self.number_of_neurons_per_hidden_layer,
-                                         self.number_of_neurons_per_hidden_layer))
-                                       .reshape(self.number_of_neurons_per_hidden_layer,
-                                                self.number_of_neurons_per_hidden_layer + 1))
+        second_hidden_layer_weights = NNU.he_initialization(self.number_of_neurons_per_hidden_layer,
+                                                            self.number_of_neurons_per_hidden_layer)
+        second_hidden_layer_biases = np.random.normal(0, 1, size=(self.number_of_neurons_per_hidden_layer, 1))
 
-        # Initialize 3 random weights for communication between second hidden layer and output layer
-        output_layer_weights = ((TrainingNeuralNetwork.xavier_initialization
-                                 (self.number_of_neurons_per_hidden_layer, self.number_of_output_neurons))
-                                .reshape(self.number_of_output_neurons, self.number_of_neurons_per_hidden_layer + 1))
+        output_layer_weights = NNU.he_initialization(self.number_of_neurons_per_hidden_layer,
+                                                     self.number_of_output_neurons)
+        output_layer_biases = np.random.normal(0, 1, size=(self.number_of_output_neurons, 1))
 
         self.weights_list.append(first_hidden_layer_weights)
         self.weights_list.append(second_hidden_layer_weights)
         self.weights_list.append(output_layer_weights)
 
+        self.biases_list.append(first_hidden_layer_biases)
+        self.biases_list.append(second_hidden_layer_biases)
+        self.biases_list.append(output_layer_biases)
+
     def train(self):
         for epoch in range(self.max_number_of_epochs):
             for instance in self.instances:
-                neurons = NeuralNetworkUtils.propagate_forward(instance[0].attributes, self.weights_list)
+                neurons = NNU.propagate_forward(instance[0].attributes, self.weights_list, self.biases_list)
                 self.back_propagate(instance[0], neurons)
 
-    def back_propagate(self, instance: Instance, neurons: list[
-        np.array(np.float32), np.array(np.float32), np.array(np.float32)]):
-        # Output layer backpropagation
-        output_layer = neurons[2]
+            if epoch % 100 == 0:
+                print("The epoch: " + str(epoch) + " is done")
+                print("Train accuracy: " + str(self.get_accuracy(self.instances)))
 
-        second_hidden_layer_transpose = np.transpose(neurons[1])
+    def back_propagate(self, instance, neurons):
 
-        softmax_derivative_with_respect_to_hidden_layer_output = np.array([self.__softmaxDerivative(output_layer[0]),
-                                                                           self.__softmaxDerivative(output_layer[1]),
-                                                                           self.__softmaxDerivative(
-                                                                               output_layer[2])]).reshape(1, 3)
+        # critical line
+        second_to_exit_delta = self.get_delta_second_to_exit(instance, neurons)
 
-        cost_function_derivative_with_respect_to_softmax = np.array([self.__cross_validation_error_derivative
-                                                                     (instance.expected_output[0], output_layer[0]),
-                                                                     self.__cross_validation_error_derivative
-                                                                     (instance.expected_output[1], output_layer[1]),
-                                                                     self.__cross_validation_error_derivative(
-                                                                         instance.expected_output[2],
-                                                                         output_layer[2])]).reshape(1, 3)
+        other_deltas = self.get_delta_sub_weights(instance, neurons, second_to_exit_delta[2])
 
-        cost_derivative_with_respect_to_second_hidden_layer_output = np.multiply(
-            cost_function_derivative_with_respect_to_softmax,
-            softmax_derivative_with_respect_to_hidden_layer_output).reshape(3, 1)
+        # critical line
+        self.update_weights_and_biases(other_deltas, second_to_exit_delta)
 
-        output_layer_delta = (self.learning_rate * np.outer
-        (cost_derivative_with_respect_to_second_hidden_layer_output, second_hidden_layer_transpose))
+    def get_delta_sub_weights(self, instance, neurons, last_computed_cost_derivative):
 
-        # Second hidden layer backpropagation
-        second_hidden_layer = neurons[1]
+        number_of_left_weights = self.number_of_hidden_layers + 1 - 1
 
-        first_hidden_layer_transpose = np.transpose(neurons[1])
+        deltas = []
 
-        second_hidden_layer_output_derivative_with_respect_to_reLU = self.weights_list[2]
+        for i in range(number_of_left_weights, 0, -1):
+            last_used_weights = self.weights_list[i]
+            current_relu_output = neurons[i * 2 - 1]
+            current_weights = self.weights_list[i - 1]
 
-        reLU_derivative_with_respect_to_first_hidden_layer_output = np.array(
-            [self.__reLUDerivative(second_hidden_layer[0]),
-             self.__reLUDerivative(second_hidden_layer[1]),
-             self.__reLUDerivative(second_hidden_layer[2]),
-             self.__reLUDerivative(second_hidden_layer[3]),
-             self.__reLUDerivative(second_hidden_layer[4]),
-             self.__reLUDerivative(second_hidden_layer[5]),
-             self.__reLUDerivative(second_hidden_layer[6])]).reshape(1, 7)
+            if i == 1:
+                current_raw_output = instance.attributes
+            else:
+                current_raw_output = neurons[i * 2 - 3]
 
-        multiply_1 = np.dot(cost_derivative_with_respect_to_second_hidden_layer_output.reshape(1, 3),
-                            second_hidden_layer_output_derivative_with_respect_to_reLU)
+            last_output_derivative_to_relu = NNU.raw_output_derivative_to_reLU(last_used_weights)
+            relu_derivative_to_next_output = NNU.reLU_derivative_to_next_output(current_relu_output)
+            next_input_derivative_to_weights = NNU.raw_output_derivative_to_weights(current_weights, current_raw_output)
+            next_input_derivative_to_bias = NNU.raw_output_derivative_to_biases()
 
-        cost_derivative_with_respect_to_first_hidden_layer_output = np.outer(
-            reLU_derivative_with_respect_to_first_hidden_layer_output,
-            multiply_1)
+            if i == 2:
+                temp1 = np.dot(last_output_derivative_to_relu, last_computed_cost_derivative)
+                temp2 = np.multiply(relu_derivative_to_next_output, temp1.reshape(1, -1))
+            else:
+                temp1 = np.dot(last_output_derivative_to_relu, last_computed_cost_derivative.reshape(-1,1))
+                temp2 = np.multiply(relu_derivative_to_next_output, temp1.reshape(1, -1))
 
-        second_hidden_layer_delta = (
-                self.learning_rate * np.multiply(cost_derivative_with_respect_to_first_hidden_layer_output,
-                                                 first_hidden_layer_transpose))
+            delta_sub_weights = np.multiply(temp2, next_input_derivative_to_weights)
+            if delta_sub_weights.shape[0] != self.weights_list[i - 1].shape[0] or delta_sub_weights.shape[1] != self.weights_list[i - 1].shape[1]:
+                delta_sub_weights = delta_sub_weights.reshape(self.weights_list[i-1].shape[0], self.weights_list[i-1].shape[1])
 
-        # First hidden layer backpropagation
-        first_hidden_layer = neurons[0]
+            delta_sub_bias = np.multiply(temp2, next_input_derivative_to_bias)
+            if delta_sub_bias.shape[0] != self.biases_list[i - 1].shape[0] or delta_sub_bias.shape[1] != self.biases_list[i - 1].shape[1]:
+                delta_sub_bias = delta_sub_bias.reshape(self.biases_list[i-1].shape[0], self.biases_list[i-1].shape[1])
 
-        input_with_bias = np.append(instance.attributes, 1)  # bias added on the last position
+            deltas.append((delta_sub_weights, delta_sub_bias))
 
-        first_hidden_layer_output_derivative_with_respect_to_reLU = self.weights_list[1]
+            last_computed_cost_derivative = temp2
 
-        reLU_derivative_with_respect_to_input = np.array([self.__reLUDerivative(first_hidden_layer[0]),
-                                                          self.__reLUDerivative(first_hidden_layer[1]),
-                                                          self.__reLUDerivative(first_hidden_layer[2]),
-                                                          self.__reLUDerivative(first_hidden_layer[3]),
-                                                          self.__reLUDerivative(first_hidden_layer[4]),
-                                                          self.__reLUDerivative(first_hidden_layer[5]),
-                                                          self.__reLUDerivative(first_hidden_layer[6])]).reshape(7, 1)
+        return deltas
 
-        multiply_2 = np.multiply(cost_derivative_with_respect_to_first_hidden_layer_output,
-                                 first_hidden_layer_output_derivative_with_respect_to_reLU)
+    def get_delta_second_to_exit(self, instance, neurons):
+        expected_output = instance.expected_output
+        second_to_exit_softmax_output = neurons[-1]
+        second_to_exit_output = neurons[-2]
+        second_to_exit_weights = self.weights_list[-1]
+        first_to_second_reLU_output = neurons[-3]
 
-        cost_derivative_with_respect_to_input = np.multiply(
-            multiply_2,
-            reLU_derivative_with_respect_to_input)
+        error_to_softmax = NNU.cross_validation_error_derivative_to_softmax(expected_output,
+                                                                            second_to_exit_softmax_output)
+        softmax_derivative_to_exit_output = NNU.softmax_derivative_to_exit_output(second_to_exit_output)
 
-        first_hidden_layer_delta = (
-                self.learning_rate * np.multiply(cost_derivative_with_respect_to_input, input_with_bias))
+        exit_output_derivative_to_weights = NNU.raw_output_derivative_to_weights(second_to_exit_weights,
+                                                                                 first_to_second_reLU_output)
+        exit_output_derivative_to_biases = NNU.raw_output_derivative_to_biases()
 
-        # Update weights
-        self.weights_list[0] -= first_hidden_layer_delta
-        self.weights_list[1] -= second_hidden_layer_delta
-        self.weights_list[2] -= output_layer_delta
+        temp1 = np.multiply(error_to_softmax, softmax_derivative_to_exit_output).reshape(-1, 1)
 
-    # @staticmethod
-    # def __cross_validation_error(instance_output_distribution, propagated_output_distribution):
-    #     error = 0
-    #     for i in range(len(instance_output_distribution)):
-    #         error += instance_output_distribution[i] * np.log(propagated_output_distribution[i])
-    #     return error
+        delta_second_to_exit_weights = np.multiply(temp1, exit_output_derivative_to_weights)
+        delta_second_to_exit_biases = np.multiply(temp1, exit_output_derivative_to_biases)
 
-    @staticmethod
-    def __cross_validation_error_derivative(specific_instance_output, specific_softmax_output):
-        return specific_instance_output / specific_softmax_output
+        return delta_second_to_exit_weights, delta_second_to_exit_biases, temp1
 
-    @staticmethod
-    def __softmaxDerivative(specific_raw_output: np.float32):  # raw_output is the value of softmax applied in a
-        # specific point
-        return specific_raw_output * (1 - specific_raw_output)
+    def update_weights_and_biases(self, other_deltas, second_to_exit_delta):
 
-    @staticmethod
-    def __reLUDerivative(x):
-        if x > 0:
-            return 1
-        else:
-            return 0
+        # update first weights and biases backward
+
+        self.weights_list[self.number_of_hidden_layers] = self.weights_list[
+                                                              self.number_of_hidden_layers] - self.learning_rate * \
+                                                          second_to_exit_delta[0]
+        self.biases_list[self.number_of_hidden_layers] = self.biases_list[
+                                                             self.number_of_hidden_layers] - self.learning_rate * \
+                                                         second_to_exit_delta[1]
+
+        # update other weights and biases backward
+        for i in range(len(other_deltas)):
+            weight_index = self.number_of_hidden_layers - i - 1
+            self.weights_list[weight_index] = self.weights_list[weight_index] - self.learning_rate * other_deltas[i][0]
+            self.biases_list[weight_index] = self.biases_list[weight_index] - self.learning_rate * other_deltas[i][1]
+
+    def get_accuracy(self, instances):
+        correct_predictions = 0
+        for instance in instances:
+            neurons = NNU.propagate_forward(instance[0].attributes, self.weights_list, self.biases_list)
+            output = neurons[-1]
+            label = -1
+            for i in range(len(output)):
+                if output[i] == max(output):
+                    label = i
+                    break
+            if label == instance[0].raw_output:
+                correct_predictions += 1
+
+        return correct_predictions / len(instances) * 100
