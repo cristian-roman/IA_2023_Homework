@@ -10,7 +10,6 @@ class Instance:
         self.attributes = Instance.__normalize_attributes(attributes)
         self.raw_output = expected_output
 
-        self.attributes = np.array(self.attributes).reshape(self.number_of_attributes, 1)
         self.expected_output = self.__model_output_vector(expected_output)
 
     def __str__(self):
@@ -29,6 +28,6 @@ class Instance:
     def __normalize_attributes(attributes):
         normalized_attributes = []
         for attribute in attributes:
-            normalized_attributes.append(attribute/15)
+            normalized_attributes.append(attribute/20)
 
         return np.array(normalized_attributes).reshape(-1, 1)
