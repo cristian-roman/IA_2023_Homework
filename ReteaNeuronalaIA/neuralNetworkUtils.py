@@ -1,57 +1,71 @@
 import numpy as np
-from instance import Instance
 
 
 class NeuralNetworkUtils:
+
     @staticmethod
-    def propagate_forward(instance_input: np.array(np.float32), weights_list: list[np.array(np.float32)]):
-        # Add the bias to the instance
-        input_with_bias = np.append(instance_input, 1)  # bias added on the last position
+    def he_initialization(total_neurons_from_layer: int, total_neurons_to_layer: int):
+        variance = 2 / total_neurons_from_layer
+        standard_deviation = np.sqrt(variance)
+        weights = np.random.normal(0, standard_deviation, (total_neurons_to_layer, total_neurons_from_layer))
+        return weights
 
+    @staticmethod
+    def __reLU(x_vector):
+        reLU_output = []
+        for x_value in x_vector:
+            if x_value > 0:
+                reLU_output.append(x_value[0])
+            else:
+                reLU_output.append(0)
+        return np.array(reLU_output).reshape(-1, 1)
+
+    @staticmethod
+    def __softmax(x_vector):
+        softmax_output = []
+        sum = 0
+        for x_value in x_vector:
+            sum += np.exp(x_value)
+
+        for x_value in x_vector:
+            softmax_output.append(np.exp(x_value) / sum)
+
+        return np.array(softmax_output).reshape(-1, 1)
+
+    @staticmethod
+    def propagate_forward(instance_input, weights_list, biases_list):
         # first propagation
-        first_hidden_layer = []
-        weights = weights_list[0]
-
-        for weight in weights:
-            raw_output = np.dot(input_with_bias, weight)
-            output = NeuralNetworkUtils.__reLU(raw_output)
-            first_hidden_layer.append(output)
+        h1 = np.dot(weights_list[0], instance_input) + biases_list[0]
+        rh1 = NeuralNetworkUtils.__reLU(h1)
 
         # second propagation
-        first_hidden_layer.append(1)  # bias added on the last position
-        second_hidden_layer = []
-        weights = weights_list[1]
-
-        for weight in weights:
-            raw_output = np.dot(first_hidden_layer, weight)
-            output = NeuralNetworkUtils.__reLU(raw_output)
-            second_hidden_layer.append(output)
+        h2 = np.dot(weights_list[1], rh1) + biases_list[1]
+        rh2 = NeuralNetworkUtils.__reLU(h2)
 
         # output propagation
-        second_hidden_layer.append(1)  # bias added on the last position
-        output_layer = []
-        weights = weights_list[2]
+        o = np.dot(weights_list[2], rh2) + biases_list[2]
+        so = NeuralNetworkUtils.__softmax(o)
 
-        for weight in weights:
-            raw_output = np.dot(second_hidden_layer, weight)
-            output_layer.append(raw_output)
-
-        output_layer = NeuralNetworkUtils.__softmax(output_layer)
-
-        return [first_hidden_layer, second_hidden_layer, output_layer]
+        return h1, rh1, h2, rh2, o, so
 
     @staticmethod
-    def __reLU(neuron_value):  # input: number, output: number
-        return max(0, neuron_value)
+    def d_softmax(softmax_values):
+        arr = []
+        for v in softmax_values:
+            arr.append(v * (1 - v))
+
+        return np.array(arr).reshape(-1, 1)
 
     @staticmethod
-    def __softmax(output_layer) -> np.array(np.float32):  # input: vector, output:vector
-        new_output_layer = []
-        sum = 0
-        for raw_output in output_layer:
-            sum += np.exp(raw_output)
+    def cost_gradient(expected_output, actual_output):
+        return expected_output - actual_output
 
-        for raw_output in output_layer:
-            new_output_layer.append(np.exp(raw_output) / sum)
-
-        return new_output_layer
+    @staticmethod
+    def d_reLU(x_vector):
+        d_reLU_output = []
+        for x_value in x_vector:
+            if x_value > 0:
+                d_reLU_output.append(1)
+            else:
+                d_reLU_output.append(0)
+        return np.array(d_reLU_output).reshape(-1, 1)
