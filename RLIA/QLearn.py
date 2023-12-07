@@ -14,10 +14,8 @@ class QLearn:
         self.episode_rewards = []
 
     def __get_action(self, state):
-        if np.random.random() < self.epsilon:
-            return np.random.randint(4)
-        else:
-            return np.argmax(self.q_table[state[0], state[1]])
+
+        return np.argmax(self.q_table[state[0], state[1]])
 
     def __update(self, state, action, reward, next_state):
         current_q = self.q_table[state[0], state[1], action]
@@ -26,7 +24,7 @@ class QLearn:
         self.q_table[state[0], state[1], action] = new_q
 
     def learn(self, env: Environment):
-        number_of_episodes = 1000
+        number_of_episodes = 10000
         for episode in range(number_of_episodes):
             state = env.start
             total_reward = 0

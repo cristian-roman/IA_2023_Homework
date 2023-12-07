@@ -28,7 +28,7 @@ class Environment:
         next_state = (next_state_x, next_state_y)
 
         if next_state == self.goal:
-            reward = 1
+            reward = 1000
             done = True
         else:
             reward = -1
