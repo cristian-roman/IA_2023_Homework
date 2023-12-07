@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 class QLearn:
 
     def __init__(self):
-        self.q_table = np.zeros((10, 7, 4))
+        self.q_table = -np.ones((10, 7, 4))
         self.alpha = 0.1
         self.gamma = 0.9
         self.epsilon = 1.0
@@ -14,7 +14,8 @@ class QLearn:
         self.episode_rewards = []
 
     def __get_action(self, state):
-
+        if np.random.rand() < self.epsilon:
+            return np.random.randint(0, 4)
         return np.argmax(self.q_table[state[0], state[1]])
 
     def __update(self, state, action, reward, next_state):
@@ -24,7 +25,7 @@ class QLearn:
         self.q_table[state[0], state[1], action] = new_q
 
     def learn(self, env: Environment):
-        number_of_episodes = 10000
+        number_of_episodes = 1000
         for episode in range(number_of_episodes):
             state = env.start
             total_reward = 0
